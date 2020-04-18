@@ -16,6 +16,8 @@ class LocationManager: NSObject {
     let locationManager = CLLocationManager()
     let manager = LocalNotificationManager()
     var lastTimestamp: Date?
+    let SCHEDULED_TIME = 20
+
     // MARK: - Properties
     
     static let shared = LocationManager()
@@ -56,7 +58,7 @@ extension LocationManager:CLLocationManagerDelegate{
         // Added logic for triggering a notification after 5 minute
         let now = Date()
         let interval = TimeInterval((lastTimestamp != nil) ? now.timeIntervalSince(lastTimestamp ?? Date()) : 0.0)
-        if !(lastTimestamp != nil) || interval >= 5 * 3 {
+        if !(lastTimestamp != nil) || Int(interval) >= SCHEDULED_TIME {
             lastTimestamp = now
             let location = Location(id: "1", title: "Current Location Time", lat: String(format:"%.3f", locValue.latitude), long: String(format:"%.3f", locValue.longitude) , time: lastTimestamp?.dateToTimeConversion() ?? "0")
             setNotification(location: location)
